@@ -3,4 +3,4 @@ venv/
 .env
 token
 test.py
-/data/
+data/pack_for_send.json
