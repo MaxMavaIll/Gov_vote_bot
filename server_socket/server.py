@@ -21,5 +21,5 @@ class EchoHandler(socketserver.BaseRequestHandler):
         # socket.sendto()
     
 if __name__ == "__main__":
-    with socketserver.TCPServer(('localhost', 2000), EchoHandler) as server:
+    with socketserver.TCPServer(('', 2000), EchoHandler) as server:
         server.serve_forever()
