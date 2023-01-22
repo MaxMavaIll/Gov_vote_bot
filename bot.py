@@ -4,6 +4,7 @@ import logging
 
 from aiogram import Bot, Dispatcher, types
 from tgbot.hendler.private.users.router import user_router
+from tgbot.hendler.group.users.router import user_router_g
 from tgbot.config import load_config
 
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ async def main():
         # admin_router,
         # checker_router,
         user_router,
+        user_router_g
     ]:
         dp.include_router(router)
     
