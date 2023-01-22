@@ -4,14 +4,14 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import Message, CallbackQuery, InputMediaPhoto
 
 
-from tgbot.hendler.group.users.router import user_router
+from tgbot.hendler.group.users.router import user_router_g
 #from tgbot.state.user.state import 
 #from tgbot.keyboard.user.inline import 
 
 
 
 
-@user_router.message(Command(commands=["start"]))
+@user_router_g.message(Command(commands=["start"]))
 async def start( message: Message, state: FSMContext):
     
     
