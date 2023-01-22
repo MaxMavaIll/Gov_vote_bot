@@ -1,5 +1,7 @@
-import json
+import json, os
 import logging
+ 
+
 from aiogram import Bot
 # from aiogram.dispatcher.fsm.storage.redis import RedisStorage
 from tgbot.config import load_config
@@ -10,9 +12,15 @@ path_save_file = "data/pack_for_send.json"
 #from schedulers.exceptions import raise_error
 
 async def add_user_checker(bot: Bot):
+    path_file = os.path.abspath(path_save_file)
+    if not os.path.exists(path_file):
+        with open(path_save_file, "w") as file:
+            json.dump({}, file)
+    
     with open(path_save_file, "r") as file:
         data = json.load(file)
     
+
     logging.info(f"Data: {data}")
     config = load_config(".env")
     for ip in list(data):
@@ -23,5 +31,5 @@ async def add_user_checker(bot: Bot):
     logging.info(f"Data_end: {data}")   
 
     with open(path_save_file, "w") as file:
-        data = json.dump(data, file)
+        json.dump(data, file)
         
