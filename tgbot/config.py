@@ -7,6 +7,7 @@ from environs import Env
 class Tg_bot:
     token: str
     admin_ids: List[int]
+    chat_id: str
     user_redis: bool
 
 #@dataclass
@@ -34,6 +35,7 @@ def load_config(path: str = None):
         tg_bot=Tg_bot(
             token=env.str("BOT_TOKEN"),
             admin_ids=list(map(int, env.list("ADMINS"))),
+            chat_id=env.str("CHAT_ID"),
             user_redis=env.bool("USE_REDIS")
         ), 
 #        db=DBConfig(

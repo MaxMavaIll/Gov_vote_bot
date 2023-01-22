@@ -16,7 +16,7 @@ async def start( message: Message, state: FSMContext):
     
     
     
-    await message.answer(f"Hallo {message.from_user.first_name} in group!! ")
+    await message.answer(f"Hallo {message.from_user.first_name} {message.from_user.id, message.chat.id} in group!! ")
 
     
 

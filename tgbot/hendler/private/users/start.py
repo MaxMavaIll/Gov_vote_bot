@@ -16,7 +16,7 @@ async def start( message: Message, state: FSMContext):
     
     
     
-    await message.answer(f"Hallo user {message.from_user.first_name}!! ")
+    await message.answer(f"Hallo user {message.from_user.first_name} {message.from_user.id, message.chat.id}!! ")
 
     
 
