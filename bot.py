@@ -43,7 +43,7 @@ async def main():
     scheduler.add_job(
                     add_user_checker,
                     "interval",
-                    seconds=10,
+                    hours=1,
                     next_run_time=datetime.now(),
                     replace_existing=True
                 )
