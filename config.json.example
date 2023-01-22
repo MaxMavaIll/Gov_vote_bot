@@ -1,0 +1,12 @@
+{
+    "juno": {
+        "bin": "junod",
+        "fees": "",
+        "node": "",
+        "chain_id": "",
+        "from": "Micks",
+        "keyring": "os",
+        "pass": "****",
+        "explorer": "https://www.mintscan.io/juno/txs/" 
+    }
+}

@@ -1,1 +1,0 @@
-from tgbot.state.user import state
