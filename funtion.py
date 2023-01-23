@@ -5,8 +5,7 @@ from os.path import exists, abspath
 from user_socket.user import usr_server
 
 path_file_out=abspath("out.json")
-get_data_txhash = {93:{"txhash": "https://www.mintscan.io/juno/txs/6127D712C05A6EE92B271174061B3567B9A2FF09E3F722BF6B52BFD7DB730F15"},
-                89: {"txhash": "https://www.mintscan.io/juno/txs/27F72C33FC7B844F99EE8E59AB7834E1A2540B91F8CB851C3D731A0B0EE67D91"}}
+get_data_txhash = {}
 
 def terminal(cmd: str = None):
     try:
