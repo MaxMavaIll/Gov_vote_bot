@@ -93,8 +93,9 @@ def form_request(text: bytes, network: str, id: str, url_explorer: str):
     
     try:
         data = json.loads(text)
-        get_data_txhash["txhash"] = url_explorer + data["txhash"]
+        get_data_txhash[id] = {"txhash": url_explorer + data["txhash"]}
         write_file(network, id)
+        logging.info(f"Proposle {id} {data}")
     except Exception as error:
         logging.error("error\n", error)
 
