@@ -1,6 +1,7 @@
 import json
 import funtion as f
 import logging as log
+import time
 
 logger = log.getLogger(__name__)
 
@@ -22,7 +23,7 @@ def main():
                                                                         configs["chain_id"], configs["keyring"], configs["from"])
                 log.info(f"Command {to_terminal}")
                 f.form_request(f.terminal(to_terminal), network, id, config[network]['explorer'])
-
+                time.sleep(10)
 
             else:
                 log.info(f"I voted for this proposol {id}")
