@@ -7,11 +7,11 @@ from user_socket.user import usr_server
 path_file_out=abspath("out.json")
 get_data_txhash = {}
 
-def terminal(cmd: str = None):
+def terminal(cmd: str = None, password: str = None):
     try:
         print("start")
         cmd = cmd.split()
-        p1 = subprocess.Popen(["echo", "12345678"], stdout=subprocess.PIPE)
+        p1 = subprocess.Popen(["echo", password], stdout=subprocess.PIPE)
         p2 = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=p1.stdout)
         output, err = p2.communicate()
         print("erro1", err)
