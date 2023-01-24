@@ -18,12 +18,13 @@ def main():
     for network, configs in config.items():
         log.info(f"ne1twork {network}")
         to_terminal = "{} q gov proposals {} --reverse --limit 20 -o json ".format(configs["bin"], configs["node"])
-        for id in f.get_vote_id(json.loads(f.terminal(to_terminal, config[network]["pass"]))):
+        for id in f.get_vote_id(json.loads(f.terminal(to_terminal, config[network]["pass"])), config[network]['vote']):
             if not f.check_voted(network, id):
                 to_terminal = "{} tx gov vote {} yes {} {} {} {} {} -o json -y".format(configs["bin"], id, configs["fees"], configs["node"], 
                                                                         configs["chain_id"], configs["keyring"], configs["from"])
                 log.info(f"Command {to_terminal}")
-                f.form_request(f.terminal(to_terminal, config[network]["pass"]), network, id, config[network]['explorer'])
+                f.form_request(f.terminal(to_terminal, config[network]["pass"]), network, id, config[network]['explorer'][0],
+                            config[network]['explorer'][1], config[network]['from'].replace("--from ", ""))
                 time.sleep(10)
 
             else:

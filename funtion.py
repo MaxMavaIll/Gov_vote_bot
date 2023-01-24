@@ -42,23 +42,36 @@ def write_file(network: str, id: str):
     with open(path_file_out, "w") as file:
         json.dump(data, file)
 
-def get_vote_id(dict: dict):
+def get_vote_id(dict: dict, data: dict):
     id = []
     for proposol in dict["proposals"]:
         if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
             id.append(proposol["proposal_id"])
+        
+    for index in range(len(data)):
+        if data[index][0] == id[index] and data[index][1] == 'none':
+            id.pop(index)
+
     return id
 
 
 def check_config(dict: dict):
-    mass = ["", "--fees ", "--node ", "--chain-id ", "--from ", "--keyring-backend ", "", ""]
+    mass = ["", "--fees ", "--node ", "--chain-id ", "--from ", "--keyring-backend ", "", "", ""]
     for network, configs in dict.items():
         i = 0
         for key in configs:
             if configs[key] != "":
                 dict[network][key] = mass[i] + configs[key]
             i+=1
-    
+
+        dict[network]["explorer"] = dict[network]["explorer"].replace(" ", "").split(",")
+        if len(dict[network]["vote"]) >= 2:
+            data = dict[network]["vote"].lower().replace(" ", "").split(",")
+            for index in range(len(data)):
+                data[index] = data[index].split("-")
+        
+        dict[network]["vote"] = data
+
 def check_existing_file(path_from_main_dir: str = ""):
     path_file = abspath(path_from_main_dir)
     if not exists(path_file):
@@ -70,14 +83,16 @@ def check_existing_file(path_from_main_dir: str = ""):
 
 
 
-def check_voted(network: str, id: str):
+def check_voted(network: str, id: str, vote: str):
     if check_existing_file("out.json"):
         with open(path_file_out, "r") as file:
             data = json.load(file)
 
         if network in data:
             for out_id in data[network]:
-                if out_id == int(id):
+                if vote[0]:
+                    pass
+                elif out_id == int(id):
                     return True
         
         with open(path_file_out, "w") as file:
@@ -89,11 +104,15 @@ def save_vote(network: str, id: str):
         pass
 
 
-def form_request(text: bytes, network: str, id: str, url_explorer: str):
+def form_request(text: bytes, network: str, id: str, url_explorer_tx: str,
+                url_explorer_proposol: str, name:str):
     
     try:
         data = json.loads(text)
-        get_data_txhash[id] = {"txhash": url_explorer + data["txhash"]}
+        get_data_txhash[id] = {"txhash": url_explorer_tx + data["txhash"],
+                                "name": name, 
+                                "proposol": url_explorer_proposol + id}
+
         write_file(network, id)
         logging.info(f"Proposle {id} {data}")
     except Exception as error:
