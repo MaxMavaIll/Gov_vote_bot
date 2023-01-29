@@ -42,11 +42,11 @@ def write_file(network: str, id: str):
     with open(path_file_out, "w") as file:
         json.dump(data, file)
 
-def get_vote_id(): #dict: dict):
-    id = [93, 94, 95]
-    # for proposol in dict["proposals"]:
-    #     if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
-    #         id.append(proposol["proposal_id"])
+def get_vote_id(dict: dict):
+    id = []
+    for proposol in dict["proposals"]:
+        if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
+            id.append(proposol["proposal_id"])
 
     return id
 
