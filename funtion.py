@@ -3,6 +3,9 @@ import json
 import logging
 from os.path import exists, abspath
 from user_socket.user import usr_server
+from dateutil import parser
+from datetime import timedelta, datetime
+
 
 path_file_out=abspath("out.json")
 get_data_txhash = {}
@@ -42,19 +45,33 @@ def write_file(network: str, id: str):
     with open(path_file_out, "w") as file:
         json.dump(data, file)
 
-def get_vote_id(dict: dict):
-    id = []
+def get_vote_id_and_last_time(dict: dict, vote_last_time: bool):
+    id = [] 
     for proposol in dict["proposals"]:
+
         if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
-            id.append(proposol["proposal_id"])
+            if vote_last_time:
+                if check_last_time_vote(proposol["voting_end_time"]):
+                    try:
+                        id.append(proposol["proposal_id"])
+                    except:
+                        id.append(proposol["id"])
+            else:
+                try:
+                    id.append(proposol["proposal_id"])
+                except:
+                    id.append(proposol["id"])
 
     return id
 
 
 def check_config(dict: dict):
     mass = ["", "--fees ", "--node ", "--chain-id ", "--from ", "--keyring-backend ", "", "", ""]
+    save = dict["vote_last_moment"]
+    del dict["vote_last_moment"]
     for network, configs in dict.items():
         i = 0
+        
         for key in configs:
             if configs[key] != "":
                 dict[network][key] = mass[i] + configs[key]
@@ -70,6 +87,8 @@ def check_config(dict: dict):
                 data[index] = data[index].split("-")
         
             dict[network]["vote"] = data
+    # dict["vote_last_moment"] = save
+    return save
 
 def check_existing_file(path_from_main_dir: str = ""):
     path_file = abspath(path_from_main_dir)
@@ -87,7 +106,7 @@ def check_voted(network: str, id: str, configs: list | str):
     if check_existing_file("out.json") and configs != "none":
         with open(path_file_out, "r") as file:
             data = json.load(file)
-        print(type(configs), type(list))
+        # print(type(configs), type(list))
         if type(configs) == type(list()):
             for index, vol in enumerate(configs):
                 if int(configs[index][0]) == id and len(configs[index]) == 2:
@@ -139,3 +158,13 @@ def send_to_server():
     if get_data_txhash != {}:
         usr_server(get_data_txhash)
         get_data_txhash = {}
+
+def check_last_time_vote(time_isoparse: dict):
+    date = parser.isoparse(time_isoparse).replace(tzinfo=None)
+    now = datetime.utcnow()
+    date = date - now
+
+    if date <= timedelta(hours=2):
+        return True
+    
+    return False
