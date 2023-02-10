@@ -7,8 +7,8 @@
         "from": "Micks",
         "keyring": "os",
         "pass": "****",
-        "explorer": "explorer": "https://www.mintscan.io/juno/txs/, https://www.mintscan.io/juno/proposals/",
+        "explorer": "https://www.mintscan.io/juno/txs/, https://www.mintscan.io/juno/proposals/",
         "vote": "yes"
-    }
+    },
     "vote_last_moment": false    
 }
