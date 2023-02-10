@@ -26,7 +26,7 @@ def main():
         for index, id in enumerate( f.get_vote_id_and_last_time(get_votes, vote_last_time)):
             answer, vote = f.check_voted(network, id, configs["vote"])
             if not answer:
-                to_terminal = "{} tx gov vote {} {} {} {} {} {} {} -o json -y".format(configs["bin"], vote, id, configs["fees"], configs["node"], 
+                to_terminal = "{} tx gov vote {} {} {} {} {} {} {} -o json -y".format(configs["bin"], id, vote, configs["fees"], configs["node"], 
                                                                         configs["chain_id"], configs["keyring"], configs["from"])
                 log.info(f"Command {to_terminal}")
                 f.form_request(f.terminal(to_terminal, config[network]["pass"]), network, id, config[network]['explorer'][0],
