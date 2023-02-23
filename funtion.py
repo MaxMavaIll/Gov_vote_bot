@@ -65,7 +65,8 @@ def get_vote_id_and_last_time(dict: dict, vote_last_time: bool):
     return id
 
 
-def check_config(dict: dict):
+def check_config():
+    config = get_config()
     mass = ["", "--fees ", "--node ", "--chain-id ", "--from ", "--keyring-backend ", "", "", ""]
     save = dict["vote_last_moment"]
     del dict["vote_last_moment"]

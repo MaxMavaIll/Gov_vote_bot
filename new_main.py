@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def main():
-    pass
+    config = f.get_config()
 
 
 
