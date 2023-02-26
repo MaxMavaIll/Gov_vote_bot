@@ -44,6 +44,7 @@ def write_file(network: str, id: str):
         json.dump(data, file)
 
 def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: bool, network: str):
+    logging.info(f"{str_terminal}")
     get_votes = json.loads(terminal(str_terminal, config["pass"]))
 
     validator_add = config["addr"]
@@ -58,7 +59,7 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
         if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
                 
 
-            a = proposol["proposal_id"] not in data[network]
+            a = int(proposol["proposal_id"]) not in data[network]
             b = check_last_time_vote(proposol["voting_end_time"], proposol["voting_start_time"], vote_last_time)
             c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposol["proposal_id"], validator_add, config["node"], config["chain_id"]), config, proposol["proposal_id"], network)
 
@@ -76,6 +77,7 @@ def get_json_file(path: str, mode: str):
 
 def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: str):
     try:
+        logging.info(f"{str_terminal}")
         votes = json.loads(terminal(str_terminal))#.format(config["bin"], config["from"], config["keyring"]))
         votes = votes["options"]["option"].title().replace("_", "")
         logging.info("Validator: {} | {} has already voted {} from {}".format(config["from"], config["addr"], votes, id))
@@ -174,45 +176,46 @@ def check_existing_file(network: str):
 
 
 
-def check_voted(network: str, id: str, configs: list | str):
+# def check_voted(network: str, id: str, configs: list | str):
 
    
-    with open(path_file_out, "r") as file:
-        data = json.load(file)
-    # print(type(configs), type(list))
-    if type(configs) == type(list()):
-        for index, vol in enumerate(configs):
-            if int(configs[index][0]) == id and len(configs[index]) == 2:
-                vote = configs[index][1]
-            elif int(configs[index][0]) == id and len(configs[index]) == 3:
-                answer = False
-                vote = configs[index][1]
-                return answer, vote
-    elif type(configs) == type(str()):
-        vote = configs
-    #     if vote[index][0] == id and vote[index][1] == 'none':
-    #         return True
+#     with open(path_file_out, "r") as file:
+#         data = json.load(file)
+#     # print(type(configs), type(list))
+#     if type(configs) == type(list()):
+#         for index, vol in enumerate(configs):
+#             if int(configs[index][0]) == id and len(configs[index]) == 2:
+#                 vote = configs[index][1]
+#             elif int(configs[index][0]) == id and len(configs[index]) == 3:
+#                 answer = False
+#                 vote = configs[index][1]
+#                 return answer, vote
+#     elif type(configs) == type(str()):
+#         vote = configs
+#     #     if vote[index][0] == id and vote[index][1] == 'none':
+#     #         return True
 
-    if network in data:
-        for out_id in data[network]:
-            if out_id == int(id) :
-                logging.info(f"I voted for this proposol {id}")
-                answer = True
-    else:
-        answer = False
+#     if network in data:
+#         for out_id in data[network]:
+#             if out_id == int(id) :
+#                 logging.info(f"I voted for this proposol {id}")
+#                 answer = True
+#     else:
+#         answer = False
 
 
-    return answer, vote
+#     return answer, vote
     
-def save_vote(network: str, id: str):
-    if exists(path_file_out):
-        pass
+# def save_vote(network: str, id: str):
+#     if exists(path_file_out):
+#         pass
 
 
 def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
     
 
     try:
+        logging.info(f"{str_terminal}")
         output = terminal(str_terminal, config["pass"])
         data = json.loads(output)
 
@@ -268,7 +271,6 @@ def get_num_vote(votes: json):
 
     for num, value in enumerate( votes["votes"]):
         gov = value["options"][0]["option"]
-        print(f"{num}. {gov}")
 
         t_v_vote = gov.split("_", 2)[-1]
         if t_v_vote not in mass.keys():
@@ -279,6 +281,7 @@ def get_num_vote(votes: json):
     return mass
 
 def get_variant_with_more_votes(srt_terminal: str) -> str:
+    logging.info(f"{srt_terminal}")
     votes = json.loads(terminal(srt_terminal))
 
     num_variant = get_num_vote(votes)
@@ -287,5 +290,7 @@ def get_variant_with_more_votes(srt_terminal: str) -> str:
 
     for key in num_variant.keys():
         if num_variant[key] == max_votes:
-            return key.title().replace("_", "")
+            position = key.title().replace("_", "")
+            logging.info(f"Position: {position}")
+            return position
 
