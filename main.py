@@ -6,6 +6,10 @@ import logging as log
 get_data_txhash = {}
 
 def main():
+    log.basicConfig(
+        level=log.DEBUG,
+        format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
+    )
     config, vote_last_moment = f.check_config()
 
     for network, configs in config.items():

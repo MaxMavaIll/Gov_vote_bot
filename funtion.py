@@ -14,13 +14,16 @@ def terminal(cmd: str = None, password: str = "None"):
     try:
         cmd = cmd.split()
         p1 = subprocess.Popen(["echo", password], stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(cmd, stdout=subprocess.PIPE, stdin=p1.stdout)
-        output, err = p2.communicate()
+        p2 = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=p1.stdout)
+        output = p2.communicate()
         p1.stdout.close()
         p2.stdout.close()
-        return output.decode('utf-8')
+        if output[0].decode('utf-8') != '':
+            return output[0].decode('utf-8')
+        elif output[1].decode('utf-8') != '':
+          return output[1].decode('utf-8')
     except Exception as error:
-        logging.error("error\n", error)
+        logging.error("error Terminal\n", error)
 
 
 def get_config() -> json:
@@ -91,7 +94,10 @@ def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: s
         return False
     
     except:
-        logging.info("Validator: {} | {} hasn`t voted {} from {} yet")
+        name = config["from"]
+        addr = config["addr"]
+
+        logging.info(f"Validator: {name} | {addr} hasn`t voted for {id} proposol yet")
         return True
 
 # def in_five_hour_start(time_isoparse: str, vote_last_time: bool):
@@ -221,9 +227,12 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
 
         write_file(network, id)
         
+        logging.info(f"I vote {id}: Success")
         return {"txhash": config['explorer'][0] + data["txhash"],
                                 "name": config["from"].replace("--from ", ""), 
                                 "proposol": config['explorer'][1] + id}
+
+    
     except Exception as error:
         name = config["from"]
         addr = config["addr"]
