@@ -209,7 +209,7 @@ def save_vote(network: str, id: str):
         pass
 
 
-def vote_for_proposal(str_terminal: str, config: dict, id: str):
+def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
     
 
     try:
