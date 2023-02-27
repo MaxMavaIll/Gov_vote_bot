@@ -84,12 +84,14 @@ def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: s
     try:
         logging.debug(f"{str_terminal}")
         votes = json.loads(terminal(str_terminal))#.format(config["bin"], config["from"], config["keyring"]))
-        votes = votes["options"]["option"].title().replace("_", "")
+        votes = votes["options"][0]["option"].title().replace("_", "")
         logging.info("He has already voted {} from {} | False\n".format(votes, id))
         with open("out.json", "r") as file:
             date = json.load(file)
+
+        if id not in date[network]:
+            date[network].append(id)
         
-        date[network].append(id)
         with open("out.json", "w") as file:
             json.dump(date, file)
         
