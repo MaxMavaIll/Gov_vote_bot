@@ -138,7 +138,7 @@ def check_config():
 
         config[network]["explorer"] = config[network]["explorer"].replace(" ", "").split(",")
         
-        config[network]["addr"] = terminal("{} keys show {} -a {} ".format(config[network]["bin"], config[network]["from"].replace("--from ", ""), config[network]["keyring"]), config[network]["pass"])
+        config[network]["addr"] = terminal("{} keys show {} -a {} ".format(config[network]["bin"], config[network]["from"].replace("--from ", ""), config[network]["keyring"]), config[network]["pass"]).replace("\n", "")
     
 
         check_existing_file(network)
