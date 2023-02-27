@@ -252,6 +252,7 @@ def send_to_server(get_data_txhash: dict):
         try:
             usr_server(get_data_txhash)
             get_data_txhash = {}
+            logging.info("I send Success")
         except Exception as error:
             logging.info(f"Error server:\n{error}")
             logging.info(f"I save get_data_txhash\n{get_data_txhash}")
