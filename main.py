@@ -1,4 +1,4 @@
-import json
+import json, time
 import funtion as f
 import logging as log
 # from apscheduler.schedulers.background import BackgroundScheduler
@@ -26,6 +26,7 @@ def main():
                                                                                         configs["node"], configs["chain_id"],
                                                                                         configs["keyring"], configs["from"]),
                                                                                         configs, network, id )
+            time.sleep(10)
 
         f.send_to_server(get_data_txhash)
 
