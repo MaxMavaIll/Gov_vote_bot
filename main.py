@@ -7,12 +7,14 @@ get_data_txhash = {}
 
 def main():
     log.basicConfig(
-        level=log.DEBUG,
+        level=log.INFO,
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
     config, vote_last_moment = f.check_config()
 
     for network, configs in config.items():
+        log.info("Name wallet: {}, Network: {}\n".format(configs["from"].replace("--from ", ""), network))
+
         id_vote_proposols = f.get_vote_id_and_last_time("{} q gov proposals {} --reverse --limit 20 -o json ".format(configs["bin"], configs["node"]), configs, vote_last_moment, network)
 
         for id in id_vote_proposols:

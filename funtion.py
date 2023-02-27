@@ -21,7 +21,7 @@ def terminal(cmd: str = None, password: str = "None"):
         if output[0].decode('utf-8') != '':
             return output[0].decode('utf-8')
         elif output[1].decode('utf-8') != '':
-          return output[1].decode('utf-8')
+          return output[1].decode('utf-8')[:200]
     except Exception as error:
         logging.error("error Terminal\n", error)
 
@@ -47,7 +47,7 @@ def write_file(network: str, id: str):
         json.dump(data, file)
 
 def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: bool, network: str):
-    logging.info(f"{str_terminal}")
+    logging.debug(f"{str_terminal}")
     get_votes = json.loads(terminal(str_terminal, config["pass"]))
 
     validator_add = config["addr"]
@@ -61,10 +61,12 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
         
         if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD":
                 
+            logging.info("Bot don`t vote this proposle: {}".format(int(proposol["proposal_id"]) not in data[network]))
 
             a = int(proposol["proposal_id"]) not in data[network]
             b = check_last_time_vote(proposol["voting_end_time"], proposol["voting_start_time"], vote_last_time)
             c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposol["proposal_id"], validator_add, config["node"], config["chain_id"]), config, proposol["proposal_id"], network)
+
 
             if a and b and c:
                 try:
@@ -80,10 +82,10 @@ def get_json_file(path: str, mode: str):
 
 def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: str):
     try:
-        logging.info(f"{str_terminal}")
+        logging.debug(f"{str_terminal}")
         votes = json.loads(terminal(str_terminal))#.format(config["bin"], config["from"], config["keyring"]))
         votes = votes["options"]["option"].title().replace("_", "")
-        logging.info("Validator: {} | {} has already voted {} from {}".format(config["from"], config["addr"], votes, id))
+        logging.info("He has already voted {} from {} | False\n".format(votes, id))
         with open("out.json", "r") as file:
             date = json.load(file)
         
@@ -94,10 +96,8 @@ def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: s
         return False
     
     except:
-        name = config["from"]
-        addr = config["addr"]
 
-        logging.info(f"Validator: {name} | {addr} hasn`t voted for {id} proposol yet")
+        logging.info(f"He hasn`t voted for {id} proposol yet | True\n")
         return True
 
 # def in_five_hour_start(time_isoparse: str, vote_last_time: bool):
@@ -221,7 +221,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
     
 
     try:
-        logging.info(f"{str_terminal}")
+        logging.debug(f"{str_terminal}")
         output = terminal(str_terminal, config["pass"])
         data = json.loads(output)
 
@@ -234,7 +234,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
 
     
     except Exception as error:
-        name = config["from"]
+        name = config["from"].replace("--from ", "")
         addr = config["addr"]
         logging.info(f"Proposol {id} not vote\nValidator: {name} | {addr}")
         return {"txhash": output, 
@@ -260,8 +260,12 @@ def check_last_time_vote(time_isoparse_finish: str, time_isoparse_start: str, vo
         date = date - now
 
         if date <= timedelta(hours=2):
+            logging.info(f"less than 2 hours until the end of time | True")
+
             return True
         
+        logging.info(f"more than 2 hours until the end of time | False")
+
         return False
     else:
         date = parser.isoparse(time_isoparse_start).replace(tzinfo=None)
@@ -269,8 +273,11 @@ def check_last_time_vote(time_isoparse_finish: str, time_isoparse_start: str, vo
         date = now - date
 
         if date >= timedelta(hours=5):
+            logging.info(f"More than 5 hours have passed | True")
+
             return True
         
+        logging.info(f"it hasn't been 5 hours yet | False")
         return False
 
 
@@ -289,9 +296,9 @@ def get_num_vote(votes: json):
 
     return mass
 
-def get_variant_with_more_votes(srt_terminal: str) -> str:
-    logging.info(f"{srt_terminal}")
-    votes = json.loads(terminal(srt_terminal))
+def get_variant_with_more_votes(str_terminal: str) -> str:
+    logging.debug(f"{str_terminal}")
+    votes = json.loads(terminal(str_terminal))
 
     num_variant = get_num_vote(votes)
 
