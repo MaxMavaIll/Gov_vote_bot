@@ -237,7 +237,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         name = config["from"]
         addr = config["addr"]
         logging.info(f"Proposol {id} not vote\nValidator: {name} | {addr}")
-        return {"txhash": f"Proposol {id} not vote\nValidator: {name} | {addr}", 
+        return {"txhash": output, 
                 "name": config["from"].replace("--from ", ""),
                 "proposol": config['explorer'][1] + id}
 
