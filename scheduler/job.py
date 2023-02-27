@@ -26,8 +26,9 @@ async def add_user_checker(bot: Bot):
     for ip in list(data):
         for network in data[ip]:
             for id in data[ip][network]:
-                txhash = data[ip][id]["txhash"]
-                await bot.send_message(chat_id=config.tg_bot.chat_id, text=f"Cyber {network} {id}\n"
+                txhash = data[ip][network][id]["txhash"]
+                name_wallet = data[ip][network][id]["name"]
+                await bot.send_message(chat_id=config.tg_bot.chat_id, text=f"{name_wallet} {network} {id}\n"
                                                                            f"{txhash}")
         del data[ip]
     logging.info(f"Data_end: {data}")   
