@@ -24,9 +24,11 @@ async def add_user_checker(bot: Bot):
     logging.info(f"Data: {data}")
     config = load_config(".env")
     for ip in list(data):
-        for id in data[ip]:
-            txhash = data[ip][id]["txhash"]
-            await bot.send_message(chat_id=config.tg_bot.chat_id, text=f"Cyber {id} {txhash}")
+        for network in data[ip]:
+            for id in data[ip][network]:
+                txhash = data[ip][id]["txhash"]
+                await bot.send_message(chat_id=config.tg_bot.chat_id, text=f"Cyber {network} {id}\n"
+                                                                           f"{txhash}")
         del data[ip]
     logging.info(f"Data_end: {data}")   
 
