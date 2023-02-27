@@ -12,9 +12,12 @@ def write_dict(data: dict):
 
 class EchoHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        data = {}
+        with open(path_data_file, "r") as file:
+            data = json.load(file)
         data_with_message = self.request.recv(1024).strip()
+        logging.info(data, data_with_message)
         data[self.client_address[0]] = json.loads(data_with_message.decode("utf-8"))
+        logging.info(data, self.client_address[0])
         logging.info("Address: {}".format(self.client_address[0]))
         logging.info("Data: {}".format(data_with_message.decode("utf-8")))
         write_dict(data)
