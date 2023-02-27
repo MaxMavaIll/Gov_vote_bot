@@ -91,6 +91,7 @@ def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: s
 
         if int(id) not in date[network]:
             date[network].append(int(id))
+            date[network].sort()
         
         with open("out.json", "w") as file:
             json.dump(date, file)
