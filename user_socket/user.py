@@ -12,7 +12,7 @@ def usr_server(data: dict ):
     data = json.dumps(data)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("135.181.138.161", 2000))
+    sock.connect((env.str("IP_SERVER"), env.int("PORT")))
 
     sock.sendall(data.encode())
 

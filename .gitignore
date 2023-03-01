@@ -7,3 +7,4 @@ data/pack_for_send.json
 out.json
 __pycache__/
 config.json
+logs
