@@ -46,11 +46,19 @@ def write_file(network: str, id: str):
     with open(path_file_out, "w") as file:
         json.dump(data, file)
 
+def check_right_key(proposol: dict):
+
+    try:
+        return int(proposol["proposal_id"])
+    except:
+        return int(proposol["id"])
+
 def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: bool, network: str):
     logging.debug(f"{str_terminal}")
     get_votes = json.loads(terminal(str_terminal, config["pass"]))
 
     validator_add = config["addr"]
+    proposal_id = check_right_key(get_votes["proposals"])
 
     with open(path_file_out, "r") as file:
         data = json.load(file)
@@ -59,22 +67,22 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
     id = [] 
     for proposol in get_votes["proposals"]:
         
-        a = int(proposol["proposal_id"]) not in data[network]
+        proposal_id = check_right_key(proposol)
+
+        a = proposal_id not in data[network]
 
         if proposol["status"] == "PROPOSAL_STATUS_VOTING_PERIOD" and a:
                 
-            logging.info("This proposle {} has been voted: {}".format(proposol["proposal_id"], int(proposol["proposal_id"]) in data[network]))
+            logging.info("This proposle {} has been voted: {}".format(proposal_id, proposal_id in data[network]))
 
             b = check_last_time_vote(proposol["voting_end_time"], proposol["voting_start_time"], vote_last_time)
-            c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposol["proposal_id"], validator_add, config["node"], config["chain_id"]), config, proposol["proposal_id"], network)
+            c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposal_id, validator_add, config["node"], config["chain_id"]), config, proposol["proposal_id"], network)
 
 
             if b and c:
-                try:
-                    id.append(proposol["proposal_id"])
-                except:
-                    id.append(proposol["id"])
-
+                
+                id.append(proposal_id)
+                
     return id
 
 def get_json_file(path: str, mode: str):
@@ -90,8 +98,8 @@ def no_vote_validator(str_terminal: str, config: dict, id: str | int, network: s
         with open("out.json", "r") as file:
             date = json.load(file)
 
-        if int(id) not in date[network]:
-            date[network].append(int(id))
+        if id not in date[network]:
+            date[network].append(id)
             date[network].sort(reverse=True)
         
         with open("out.json", "w") as file:
