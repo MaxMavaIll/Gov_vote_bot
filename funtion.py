@@ -230,6 +230,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         data = json.loads(output)
 
         if data["raw_log"] != "[]":
+            logging.info("Proposol error: Raw_log\n {}".format(data["raw_log"]))
             output = data["raw_log"]
             int("m")
 
