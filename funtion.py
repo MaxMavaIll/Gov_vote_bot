@@ -253,7 +253,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         logging.info("I vote {}: {} Success".format(id, data["txhash"]))
         return {"txhash": config['explorer'][0] + data["txhash"],
                                 "name": config["from"].replace("--from ", ""), 
-                                "proposol": config['explorer'][1] + id}
+                                "proposol": config['explorer'][1] + str(id)}
 
     
     except Exception as error:
@@ -262,7 +262,7 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         logging.info(f"Proposol {id} not vote\nValidator: {name} | {addr}")
         return {"txhash": output, 
                 "name": config["from"].replace("--from ", ""),
-                "proposol": config['explorer'][1] + id}
+                "proposol": config['explorer'][1] + str(id)}
 
 def send_to_server(get_data_txhash: dict):
     
