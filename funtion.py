@@ -229,9 +229,13 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         output = terminal(str_terminal, config["pass"])
         data = json.loads(output)
 
+        if data["raw_log"] != "[]":
+            output = data["raw_log"]
+            int("m")
+
         write_file(network, id)
-        
-        logging.info(f"I vote {id}: Success")
+         
+        logging.info("I vote {}: {} Success".format(id, data["txhash"]))
         return {"txhash": config['explorer'][0] + data["txhash"],
                                 "name": config["from"].replace("--from ", ""), 
                                 "proposol": config['explorer'][1] + id}
