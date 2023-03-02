@@ -136,7 +136,7 @@ def check_config():
     for network in config.keys():
         i = 0
 
-        if config[network]["fees"][0] == "|":
+        if "|" in config[network]["fees"]:
             config[network]["fees"] = config[network]["fees"].replace('|', '')
             
         elif config[network]["fees"] != "":
