@@ -75,7 +75,7 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
             logging.info("This proposle {} has been voted: {}".format(proposal_id, proposal_id in data[network]))
 
             b = check_last_time_vote(proposol["voting_end_time"], proposol["voting_start_time"], vote_last_time)
-            c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposal_id, validator_add, config["node"], config["chain_id"]), config, proposol["proposal_id"], network)
+            c = no_vote_validator("{} q gov vote {} {} {} {} -o json".format(config["bin"], proposal_id, validator_add, config["node"], config["chain_id"]), config, proposal_id, network)
 
 
             if b and c:
