@@ -80,7 +80,7 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
 
 
             if b and c:
-                
+
                 id.append(proposal_id)
                 
     return id
@@ -136,14 +136,21 @@ def check_config():
     for network in config.keys():
         i = 0
 
-        if config[network]["fees"] != "":
+        if config[network]["fees"][0] == "|":
+            config[network]["fees"] = config[network]["fees"].replace('|', '')
+            
+        elif config[network]["fees"] != "":
             config[network]["fees"] = "--fees " + config[network]["fees"]
+
         if config[network]["node"] != "":
             config[network]["node"] = "--node " + config[network]["node"]
+
         if config[network]["chain_id"] != "":
             config[network]["chain_id"] = "--chain-id " + config[network]["chain_id"]
+
         if config[network]["from"] != "":
             config[network]["from"] = "--from " + config[network]["from"]
+            
         if config[network]["keyring"] != "":
             config[network]["keyring"] = "--keyring-backend " + config[network]["keyring"]
         
