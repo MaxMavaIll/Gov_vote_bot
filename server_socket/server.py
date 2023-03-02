@@ -3,6 +3,10 @@ import sys
 import json
 import logging as log
 
+from environs import Env
+
+env = Env()
+env.read_env(".env")
 
 path_data_file = "data/pack_for_send.json"
 
@@ -10,7 +14,7 @@ def write_dict(data: dict):
     with open(path_data_file, "w") as file:
         json.dump(data, file)
 
-class EchoHandler(socketserver.BaseRequestHandler):
+class MyTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         with open(path_data_file, "r") as file:
             data = json.load(file)
@@ -27,6 +31,17 @@ class EchoHandler(socketserver.BaseRequestHandler):
         log.info("Data: {}".format(data_with_message))
         write_dict(data)
         # socket.sendto()
+
+class CheckIpTCPServer(socketserver.TCPServer):
+    # Забороняємо з'єднання з недозволених IP-адрес
+    def verify_request(self, request, client_address):
+        
+
+        if client_address[0] in list(map(int, env.list("ALLOWED_IPS"))):
+            return True
+        else:
+            return False
+
     
 if __name__ == "__main__":
     log.basicConfig(
@@ -34,5 +49,5 @@ if __name__ == "__main__":
         format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s',
     )
 
-    with socketserver.TCPServer(('', 9416), EchoHandler) as server:
+    with CheckIpTCPServer(('', env.int("PORT")), MyTCPHandler) as server:
         server.serve_forever()
