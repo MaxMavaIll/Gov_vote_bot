@@ -40,6 +40,7 @@ class CheckIpTCPServer(socketserver.TCPServer):
         if client_address[0] in list(map(int, env.list("ALLOWED_IPS"))):
             return True
         else:
+            log.info(f"This address wanted to connect with server {client_address[0]}\nPermission denied!")
             return False
 
     
