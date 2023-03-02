@@ -58,7 +58,6 @@ def get_vote_id_and_last_time(str_terminal: str, config: dict, vote_last_time: b
     get_votes = json.loads(terminal(str_terminal, config["pass"]))
 
     validator_add = config["addr"]
-    proposal_id = check_right_key(get_votes["proposals"])
 
     with open(path_file_out, "r") as file:
         data = json.load(file)
