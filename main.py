@@ -30,7 +30,7 @@ def main():
                                                                                         configs["node"], configs["chain_id"],
                                                                                         configs["keyring"], configs["from"]),
                                                                                         configs, network, id )
-            time.sleep(10)
+            time.sleep(30)
 
     f.send_to_server(get_data_txhash)
 
