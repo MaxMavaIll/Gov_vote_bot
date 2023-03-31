@@ -32,6 +32,7 @@ async def add_user_checker(bot: Bot):
                     txhash = data[ip][network][id]["txhash"]
                     error = data[ip][network][id]["error"]
                     name_wallet = data[ip][network][id]["name"]
+                    time_proposol = ''
 
                     if txhash != '':
                         await bot.send_message(chat_id=config.tg_bot.chat_id, text=f"{name_wallet} {network} {id}\n"
@@ -41,6 +42,11 @@ async def add_user_checker(bot: Bot):
                         for admin_id in config.tg_bot.admin_ids:
                             await bot.send_message(chat_id=admin_id, text=f"{name_wallet} {network} {id}\n"
                                                                            f"{error}")
+                    
+                    if time_proposol != '':
+                        for admin_id in config.tg_bot.admin_ids:
+                            await bot.send_message(chat_id=admin_id, text=f"{network} {id}\n"
+                                                                          f"{time_proposol}")
                             
         del data[ip]
     logging.info(f"Data_end: {data}")   
