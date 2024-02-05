@@ -1,5 +1,6 @@
 import subprocess
 import json
+import toml
 import logging
 from os.path import exists, abspath
 from user_socket.user import usr_server
@@ -29,6 +30,7 @@ def terminal(cmd: str = None, password: str = "None"):
 def get_config() -> json:
     with open("config.json", "r") as file:
         jsn = json.load(file)
+        toml.load(file)
     
     return jsn
 
@@ -153,30 +155,10 @@ def check_config():
         if config[network]["keyring"] != "":
             config[network]["keyring"] = "--keyring-backend " + config[network]["keyring"]
         
-
-        config[network]["explorer"] = config[network]["explorer"].replace(" ", "").split(",")
-        
         config[network]["addr"] = terminal("{} keys show {} -a {} ".format(config[network]["bin"], config[network]["from"].replace("--from ", ""), config[network]["keyring"]), config[network]["pass"]).replace("\n", "")
     
 
         check_existing_file(network)
-        
-        # config[network]["vote"] = get_variant_with_more_votes()
-
-        # vote_split = config[network]["vote"].split(",")
-        # if len(config[network]["vote"].split(",")) == 1:
-        #     if "".sw
-
-        # if config[network]["vote"].lower() in ['none', 'yes', 'no'] :
-        #     config[network]["vote"] = config[network]["vote"].lower()
-
-        # else:
-        #     data = config[network]["vote"].lower().replace(" ", "").split(",")
-        #     for index in range(len(data)):
-        #         data[index] = data[index].split("-")
-        
-        #     config[network]["vote"] = data
-    # dict["vote_last_moment"] = save
     return config, save
 
 
@@ -251,30 +233,13 @@ def vote_for_proposal(str_terminal: str, config: dict, network: str, id: str):
         write_file(network, id)
          
         logging.info("I vote {}: {} Success".format(id, data["txhash"]))
-        return {"txhash": config['explorer'][0] + data["txhash"],
-                                "name": config["from"].replace("--from ", ""), 
-                                "proposol": config['explorer'][1] + str(id)}
 
     
     except Exception as error:
         name = config["from"].replace("--from ", "")
         addr = config["addr"]
         logging.info(f"Proposol {id} not vote\nValidator: {name} | {addr}")
-        return {"txhash": output, 
-                "name": config["from"].replace("--from ", ""),
-                "proposol": config['explorer'][1] + str(id)}
 
-def send_to_server(get_data_txhash: dict):
-    
-    logging.info(f"{get_data_txhash != {}}")
-    if get_data_txhash != {}:
-        try:
-            usr_server(get_data_txhash)
-            get_data_txhash = {}
-            logging.info("I send Success")
-        except Exception as error:
-            logging.info(f"Error server:\n{error}")
-            logging.info(f"I save get_data_txhash\n{get_data_txhash}")
 
 def check_last_time_vote(time_isoparse_finish: str, time_isoparse_start: str, vote_last_time: bool):
 

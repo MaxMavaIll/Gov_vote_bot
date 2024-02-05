@@ -1,0 +1,8 @@
+[juno]
+"bin" = "junod"
+"fees" = ""
+"node" = "http://localhost:26657"
+"chain_id" = "juno-1"
+"from" = "Micks"
+"keyring" = "os"
+"pass" = "****"

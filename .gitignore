@@ -8,3 +8,4 @@ out.json
 __pycache__/
 config.json
 logs
+config.toml
