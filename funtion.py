@@ -28,11 +28,9 @@ def terminal(cmd: str = None, password: str = "None"):
 
 
 def get_config() -> json:
-    with open("config.json", "r") as file:
-        jsn = json.load(file)
-        toml.load(file)
+    tsn = toml.load('config.toml')
     
-    return jsn
+    return tsn
 
 def write_file(network: str, id: str):
     with open(path_file_out, "r") as file:
